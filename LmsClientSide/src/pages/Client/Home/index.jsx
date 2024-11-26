@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css';
 import Swal from 'sweetalert2';
 
@@ -8,12 +8,37 @@ const Home = () => {
     fullName: '',
     Age: '',
     IsParent: '',
-    PhoneNumber:'',
-    ChoosenCourse:'',
-    ChildName:'',
-    ChildAge:'',
-    Email:''
+    PhoneNumber: '',
+    ChoosenCourse: '',
+    ChildName: '',
+    ChildAge: '',
+    Email: '',
   });
+  const [courses, setCourses] = useState([]); // State to store courses
+  const [submissionResponse, setSubmissionResponse] = useState(null); 
+  // Fetch courses from API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('https://localhost:7032/api/Course/GetAllAsSelectItem');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+        const data = await response.json();
+        setCourses(data); // Update the state with fetched courses
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Failed to load courses. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,25 +51,41 @@ const Home = () => {
     try {
       const formDataObj = new FormData();
   
-      // Append all fields to FormData
       for (const key in formData) {
         formDataObj.append(key, formData[key]);
       }
   
-      // Send FormData to the API
       const response = await fetch('https://localhost:7032/api/RequstToRegister', {
         method: 'POST',
-        body: formDataObj, // Send FormData directly
+        body: formDataObj,
       });
   
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to submit the request. ${errorText}`);
+        const errorResponse = await response.json();
+  
+        if (errorResponse.errors) {
+          // Format validation errors
+          const errorMessages = Object.entries(errorResponse.errors)
+            .map(([field, messages]) => {
+              if (Array.isArray(messages)) {
+                // Join messages if it's an array
+                return `${field}: ${messages.join(', ')}`;
+              } else {
+                // Otherwise, assume it's a string or single message
+                return `${field}: ${messages}`;
+              }
+            })
+            .join('\n');
+  
+          throw new Error(`Validation errors:\n${errorMessages}`);
+        }
+  
+        throw new Error('Failed to submit the request.');
       }
   
       const data = await response.json();
-  
-      // Show SweetAlert success popup
+      setSubmissionResponse(data.message || 'Submission successful!');
+
       Swal.fire({
         title: 'Success!',
         text: 'Your request has been submitted successfully.',
@@ -52,9 +93,8 @@ const Home = () => {
         confirmButtonText: 'OK',
       });
   
-      setIsModalOpen(false); // Close the modal on success
+      setIsModalOpen(false);
     } catch (error) {
-      // Show SweetAlert error popup
       Swal.fire({
         title: 'Error!',
         text: `An error occurred: ${error.message}`,
@@ -64,11 +104,10 @@ const Home = () => {
     }
   };
   
-  
 
   return (
     <div>
-      <div className="flex justify-center items-center mt-10">
+     <div className="flex justify-center items-center mt-10">
         <div className="relative w-full max-w-2xl">
           {/* Background Glow Effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500 rounded-3xl blur-2xl opacity-30"></div>
@@ -108,40 +147,44 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {/* Other UI components */}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2 className="modal-header">Request a Course</h2>
+            <form onSubmit={handleFormSubmit}>
+              <div className="modal-body">
+                {/* Full Name */}
+                <div className="form-group">
+                  <label htmlFor="fullName">Full Name</label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
 
-      {/* Modal */}
-      {/* Modal */}
-{/* Modal */}
-{/* Modal */}
-{isModalOpen && (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <h2 className="modal-header">Request a Course</h2>
-      <form onSubmit={handleFormSubmit}>
-        <div className="modal-body">
-          {/* Full Name */}
-          <label htmlFor="fullName">Full Name</label>
-          <input
-            type="text"
-            id="fullName"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleInputChange}
-            required
-          />
+                {/* Age */}
+                <div className="form-group">
+                  <label htmlFor="age">Age</label>
+                  <input
+                    type="number"
+                    id="age"
+                    name="Age"
+                    value={formData.Age}
+                    onChange={handleInputChange}
+                    placeholder="Enter your age"
+                    required
+                  />
+                </div>
 
-          {/* Age */}
-          <label htmlFor="age">Age</label>
-          <input
-            type="number"
-            id="age"
-            name="Age"
-            value={formData.Age}
-            onChange={handleInputChange}
-            required
-          />
-
-          {/* IsParent */}
+                {/* IsParent */}
+               {/* IsParent */}
+        <div className="form-group">
           <label htmlFor="isParent">Are you a parent?</label>
           <select
             id="isParent"
@@ -154,10 +197,12 @@ const Home = () => {
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
+        </div>
 
-          {/* Child Name (Conditional) */}
-          {formData.IsParent === 'true' && (
-            <>
+        {/* Conditional Fields for Parents */}
+        {formData.IsParent === 'true' && (
+          <>
+            <div className="form-group">
               <label htmlFor="childName">Child's Name</label>
               <input
                 type="text"
@@ -165,9 +210,12 @@ const Home = () => {
                 name="ChildName"
                 value={formData.ChildName}
                 onChange={handleInputChange}
+                placeholder="Enter child's name"
                 required
               />
+            </div>
 
+            <div className="form-group">
               <label htmlFor="childAge">Child's Age</label>
               <input
                 type="number"
@@ -175,62 +223,84 @@ const Home = () => {
                 name="ChildAge"
                 value={formData.ChildAge}
                 onChange={handleInputChange}
+                placeholder="Enter child's age"
                 required
               />
-            </>
-          )}
+            </div>
+          </>
+        )}
 
-          {/* Phone Number */}
-          <label htmlFor="phoneNumber">Phone Number</label>
-          <input
-            type="text"
-            id="phoneNumber"
-            name="PhoneNumber"
-            value={formData.PhoneNumber}
-            onChange={handleInputChange}
-            required
-          />
+                {/* Phone Number */}
+                <div className="form-group">
+                  <label htmlFor="phoneNumber">Phone Number</label>
+                  <input
+                    type="text"
+                    id="phoneNumber"
+                    name="PhoneNumber"
+                    value={formData.PhoneNumber}
+                    onChange={handleInputChange}
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
 
-          {/* Chosen Course */}
-          <label htmlFor="chosenCourse">Chosen Course</label>
-          <input
-            type="text"
-            id="chosenCourse"
-            name="ChoosenCourse"
-            value={formData.ChoosenCourse}
-            onChange={handleInputChange}
-            required
-          />
+                {/* Chosen Course */}
+                <div className="form-group">
+                  <label htmlFor="chosenCourse">Chosen Course</label>
+                  <select
+                    id="chosenCourse"
+                    name="ChoosenCourse"
+                    value={formData.ChoosenCourse}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="">Select a course</option>
+                    {courses.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-          {/* Email */}
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="Email"
-            value={formData.Email}
-            onChange={handleInputChange}
-            required
-          />
+                {/* Email */}
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="Email"
+                    value={formData.Email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-cancel"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-
-        <div className="modal-footer">
-          <button
-            type="button"
-            className="btn btn-cancel"
-            onClick={() => setIsModalOpen(false)}
-          >
-            Cancel
-          </button>
-          <button type="submit" className="btn btn-submit">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+      )}
+      {/* Section to display the server's response */}
+      {submissionResponse && (
+  <div className="response-section">
+    <h3 className="response-title">Server Response</h3>
+    <p className="response-message">{submissionResponse}</p>
   </div>
 )}
-
 
     </div>
   );
