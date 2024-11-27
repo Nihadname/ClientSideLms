@@ -109,11 +109,7 @@ const Home = () => {
     <div>
   <div className="hero">
     <div className="hero-content">
-      <div className="logo-container">
-        <div className="logo">
-          <span>A</span>
-        </div>
-      </div>
+    
       <h1 className="hero-title">
         Welcome to <span className="highlight">EduHub</span>
       </h1>
