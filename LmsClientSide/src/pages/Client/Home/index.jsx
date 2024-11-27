@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import Swal from 'sweetalert2';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBook, faUsers, faChartLine } from '@fortawesome/free-solid-svg-icons';
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -191,6 +192,8 @@ const Home = () => {
                     name="ChildAge"
                     value={formData.ChildAge}
                     onChange={handleInputChange}
+                    min={15}
+                    max={18}
                     placeholder="Enter child's age"
                     required
                   />
@@ -258,6 +261,39 @@ const Home = () => {
       <p className="response-message">{submissionResponse}</p>
     </div>
   )}
+  <section className="features">
+  <h2 className="section-title">Why Choose <span className="highlight">EduHub</span>?</h2>
+  <p className="section-description">
+    Unlock endless possibilities with our platform! Here's what sets us apart.
+  </p>
+  <div className="feature-list">
+    <div className="feature-card">
+      <div className="icon-wrapper">
+      <FontAwesomeIcon icon={faBook} className="feature-icon" />
+      </div>
+      <h3>Comprehensive Courses</h3>
+      <p>Access a wide range of subjects with expert guidance and tailored content.</p>
+      <button className="learn-more">Learn More</button>
+    </div>
+    <div className="feature-card">
+      <div className="icon-wrapper">
+      <FontAwesomeIcon icon={faUsers} className="feature-icon" />
+      </div>
+      <h3>Interactive Community</h3>
+      <p>Join a vibrant community of learners and educators to grow together.</p>
+      <button className="learn-more">Learn More</button>
+    </div>
+    <div className="feature-card">
+      <div className="icon-wrapper">
+      <FontAwesomeIcon icon={faChartLine} className="feature-icon" />
+      </div>
+      <h3>Track Your Progress</h3>
+      <p>Analyze your learning journey with real-time progress tracking tools.</p>
+      <button className="learn-more">Learn More</button>
+    </div>
+  </div>
+</section>
+
 </div>
 
   );
