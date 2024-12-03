@@ -3,8 +3,12 @@ import './index.css';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook, faUsers, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+
   const [formData, setFormData] = useState({
     fullName: '',
     Age: '',
@@ -15,6 +19,12 @@ const Home = () => {
     ChildAge: '',
     Email: '',
   });
+  const navigate = useNavigate();
+
+  const redirectToLogin = () => {
+    navigate('/login'); // Replace '/login' with the actual path to your login page
+  };
+
   const [courses, setCourses] = useState([]); // State to store courses
   const [submissionResponse, setSubmissionResponse] = useState(null); 
   // Fetch courses from API
@@ -48,7 +58,8 @@ const Home = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
+    setIsLoading(true); // Start loading
+
     try {
       const formDataObj = new FormData();
   
@@ -89,9 +100,10 @@ const Home = () => {
 
       Swal.fire({
         title: 'Success!',
-        text: 'Your request has been submitted successfully.',
+        text: 'Your request has been submitted successfully. now check your email to cerify account ',
         icon: 'success',
         confirmButtonText: 'OK',
+
       });
   
       setIsModalOpen(false);
@@ -102,6 +114,8 @@ const Home = () => {
         icon: 'error',
         confirmButtonText: 'Try Again',
       });
+    }finally {
+      setIsLoading(false); // Stop loading
     }
   };
   
@@ -118,8 +132,9 @@ const Home = () => {
         Login or create an account to explore the features we offer.
       </p>
       <div className="cta-buttons">
-        <button id="loginButton" className="btn-primary">Login</button>
-        <button onClick={() => setIsModalOpen(true)} className="btn-secondary">
+      <button id="loginButton" className="btn-primary" onClick={redirectToLogin}>
+      Login
+    </button>        <button onClick={() => setIsModalOpen(true)} className="btn-secondary">
           Request a Course
         </button>
       </div>
@@ -246,9 +261,9 @@ const Home = () => {
             <button type="button" className="btn-cancel" onClick={() => setIsModalOpen(false)}>
               Cancel
             </button>
-            <button type="submit" className="btn-submit">
-              Submit
-            </button>
+             <button type="submit" className="btn-submit" disabled={isLoading}>
+                  {isLoading ? 'Submitting...' : 'Submit'}
+                </button>
           </div>
         </form>
       </div>

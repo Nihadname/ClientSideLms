@@ -1,9 +1,9 @@
 import React from 'react'
+import './index.css';
 
 const FooterClient = () => {
   return (
     <div>
-      <h1>Salam</h1>
 
     </div>
   )

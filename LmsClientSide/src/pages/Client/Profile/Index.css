@@ -1,0 +1,144 @@
+/* Resetting styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+ 
+    height: 100vh;
+  }
+  
+  /* Container for the profile card */
+  .profile-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  /* Profile card styling */
+  .profile-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    text-align: center;
+  }
+  
+  .profile-header {
+    margin-bottom: 20px;
+  }
+  
+  .avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #4CAF50;
+  }
+  
+  .username {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 15px;
+  }
+  
+  .bio {
+    color: #555;
+    font-size: 16px;
+    margin-top: 5px;
+  }
+  
+  /* Profile details section */
+  .profile-details {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .profile-details h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .info p {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 8px;
+  }
+  
+  .info strong {
+    color: #333;
+  }
+  
+  /* Buttons for editing and logging out */
+  .profile-actions {
+    margin-top: 30px;
+  }
+  
+  .edit-btn,
+  .logout-btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    width: 200px;
+    margin: 10px 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .edit-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .edit-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  
+  .logout-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .logout-btn:hover {
+    background-color: #e53935;
+    transform: scale(1.05);
+  }
+  
+  /* Responsive Design for mobile */
+  @media (max-width: 480px) {
+    .profile-card {
+      padding: 20px;
+    }
+  
+    .profile-header .avatar img {
+      width: 100px;
+      height: 100px;
+    }
+  
+    .username {
+      font-size: 24px;
+    }
+  
+    .bio {
+      font-size: 14px;
+    }
+  
+    .info p {
+      font-size: 14px;
+    }
+  
+    .edit-btn,
+    .logout-btn {
+      width: 100%;
+    }
+  }
+  

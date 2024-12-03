@@ -314,7 +314,9 @@ body {
     flex-direction: column;
     gap: 1.5rem;
   }
-
+  .feature-card {
+    padding: 1rem;
+}
   .feature-card {
     width: 100%;
     padding: 2rem;
@@ -350,10 +352,7 @@ body {
     font-size: 2rem;
   }
 
-  .feature-card {
-    padding: 1rem;
-  }
-
+  
   .feature-card h3 {
     font-size: 1.25rem;
   }
