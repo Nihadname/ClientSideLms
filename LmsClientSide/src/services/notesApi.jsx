@@ -1,4 +1,6 @@
 // src/services/notesApi.js
+import axios from 'axios';
+
 const API_URL = 'https://localhost:7032/api/Note';
 
 export const getNotes = async (token) => {
@@ -38,25 +40,28 @@ export const createNote = async (note, token) => {
 // Update Note API request example
 // Update Note API request example
 export const updateNote = async (id, updatedNote, token) => {
-    const response = await fetch(`https://localhost:7032/api/Note/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(updatedNote),
-    });
-
-    if (!response.ok) {
-      throw new Error('Error updating note');
+    try {
+      const response = await axios.put(`https://localhost:7032/api/Note/${id}`, updatedNote, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.data;  // Ensure that the updated note is returned here
+    } catch (error) {
+      console.error('Error updating note:', error);
+      throw error;
     }
-
-    return await response.json();
-};
+  };
+  
+  
 
   
 
 export const deleteNote = async (id, token) => {
+    if (!id) {
+        console.error('Invalid note ID');
+        return;
+      }
   try {
     const response = await fetch(`${API_URL}/${id}`, {
       method: 'DELETE',

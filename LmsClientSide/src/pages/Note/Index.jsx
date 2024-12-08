@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getNotes, createNote, updateNote, deleteNote } from '../../services/notesApi';
+import { createNote, deleteNote } from '../../services/notesApi';
 import './index.css';
 import NoteCard from '../../components/NoteCard/Index';
+import axios from 'axios';
 
 function NotesPage() {
   const [notes, setNotes] = useState([]);
@@ -10,34 +11,48 @@ function NotesPage() {
     description: '',
     categoryName: ''
   });
-  const [editingNote, setEditingNote] = useState(null);  // Track which note is being edited
+  const [editingNote, setEditingNote] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem('jwtToken');
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 10;
 
   useEffect(() => {
-    if (!token) return;
     const fetchNotes = async () => {
+      setLoading(true);
       try {
-        const data = await getNotes(token);
-        if (Array.isArray(data.items)) {
-          setNotes(data.items);
-        } else {
-          setError('Invalid response format');
-        }
-        setLoading(false);
+        const response = await axios.get('https://localhost:7032/api/Note', {
+          params: {
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+          },
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        console.log(response.data); // Log to verify data structure
+        setNotes(response.data.items);
+        setTotalPages(response.data.totalPages);
       } catch (error) {
-        setError('Failed to load notes');
+        console.error('Error fetching notes:', error);
+      } finally {
         setLoading(false);
       }
     };
+
     fetchNotes();
-  }, [token]);
+  }, [pageNumber]);
+
+  console.log(notes);  // Log notes to ensure each note has a unique ID
 
   const handleCreateNote = async () => {
     if (!newNote.title.trim() || !newNote.description.trim() || !newNote.categoryName.trim()) return;
     try {
       const createdNote = await createNote(newNote, token);
+      console.log("Created note:", createdNote);  // Log the response to see if it includes the `id`
       setNotes([...notes, createdNote]);
       setNewNote({
         title: '',
@@ -49,17 +64,54 @@ function NotesPage() {
     }
   };
 
+  const cleanObject = (obj) => {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined)
+    );
+  };
+
   const handleUpdateNote = async (id, updatedNote) => {
+    if (!id) {
+      console.error('Invalid note ID');
+      return;
+    }
+    
+    // Log the data just before sending the update request
+    console.log("Sending updated note:", updatedNote);
+  
     try {
-      const updatedNoteResponse = await updateNote(id, updatedNote, token);
-      setNotes(notes.map(note => (note.id === id ? updatedNoteResponse : note)));
-      setEditingNote(null);  // Clear editing after update
+      // Create a FormData object and append the fields
+      const formData = new FormData();
+      formData.append('id', id);
+      formData.append('title', updatedNote.title);
+      formData.append('description', updatedNote.description);
+      formData.append('categoryName', updatedNote.categoryName);
+  
+      // Manually make the PUT request to update the note
+      const response = await axios.put(`https://localhost:7032/api/Note/${id}`, formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data', // Set content type to multipart/form-data
+        },
+      });
+  
+      // Log the updated note response from the API
+      console.log('Updated note response:', response.data);
+  
+      // Update the notes in state with the updated note
+      setNotes(notes.map(note => (note.id === id ? response.data : note)));
+      setEditingNote(null);
     } catch (error) {
       setError('Error updating note: ' + error.message);
     }
   };
+  
 
   const handleDeleteNote = async (id) => {
+    if (!id) {
+      console.error('Invalid note ID');
+      return;
+    }
     try {
       await deleteNote(id, token);
       setNotes(notes.filter(note => note.id !== id));
@@ -96,19 +148,35 @@ function NotesPage() {
       </div>
 
       <div className="notes-list">
-      <div className="notes-list">
-  {notes.map(note => (
-    <NoteCard
-      key={note.id}  // Ensure this is unique
-      note={note}
-      onUpdate={handleUpdateNote}
-      onDelete={handleDeleteNote}
-      setEditingNote={setEditingNote}
-      editingNote={editingNote}
-    />
-  ))}
-</div>
+        {notes.map(note => {
+          if (!note.id) {
+            console.error("Note has no ID", note);  // This will log notes that lack an ID
+          }
+          return (
+            <NoteCard
+              key={note.id}  // Ensure unique key prop
+              note={note}
+              onUpdate={handleUpdateNote}
+              onDelete={handleDeleteNote}
+              setEditingNote={setEditingNote}
+              editingNote={editingNote}
+            />
+          );
+        })}
+      </div>
 
+      <div className="pagination">
+        <button 
+          disabled={pageNumber === 1}
+          onClick={() => setPageNumber(pageNumber - 1)}>
+          Previous
+        </button>
+        <span>Page {pageNumber} of {totalPages}</span>
+        <button 
+          disabled={pageNumber === totalPages}
+          onClick={() => setPageNumber(pageNumber + 1)}>
+          Next
+        </button>
       </div>
     </div>
   );

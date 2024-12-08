@@ -4,7 +4,7 @@ function NoteCard({ note, onUpdate, onDelete, setEditingNote, editingNote }) {
   const [editedNote, setEditedNote] = useState({
     title: note.title,
     description: note.description,
-    categoryName: note.categoryName
+    categoryName: note.categoryName,
   });
 
   // When editingNote changes, update the local editedNote state
@@ -13,16 +13,16 @@ function NoteCard({ note, onUpdate, onDelete, setEditingNote, editingNote }) {
       setEditedNote({
         title: editingNote.title,
         description: editingNote.description,
-        categoryName: editingNote.categoryName
+        categoryName: editingNote.categoryName,
       });
     }
   }, [editingNote, note.id]);
 
   const handleEdit = () => {
     if (editingNote && editingNote.id === note.id) {
-      onUpdate(note.id, editedNote);  // Correctly pass the note.id to the update function
+      onUpdate(note.id, editedNote); // Correctly pass note.id for the PUT request
     } else {
-      setEditingNote(note);  // Set the note to be edited
+      setEditingNote(note); // Set the note to be edited
     }
   };
 
