@@ -17,7 +17,7 @@ function NotesPage() {
   const token = localStorage.getItem('jwtToken');
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 10;
+  const pageSize = 3;
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -147,7 +147,7 @@ function NotesPage() {
         <button onClick={handleCreateNote}>Add Note</button>
       </div>
 
-      <div className="notes-list">
+      <div className="notes-list" style={{marginBottom:"25px"}}>
         {notes.map(note => {
           if (!note.id) {
             console.error("Note has no ID", note);  // This will log notes that lack an ID
