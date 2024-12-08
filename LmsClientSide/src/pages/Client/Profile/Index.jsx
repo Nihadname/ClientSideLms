@@ -17,6 +17,7 @@ function Profile() {
       return;
     }
 
+
     // Verify token with an API request (replace with your actual API URL)
     fetch("https://localhost:7032/api/Auth/Profile", {
       method: 'GET',
@@ -51,7 +52,12 @@ function Profile() {
   if (!user) {
     return <div>User data is not available</div>;
   }
-
+  const handleLogout = () => {
+    // Clear local storage and navigate to home
+    localStorage.removeItem('jwtToken');
+    
+    navigate('/');
+  };
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -74,7 +80,7 @@ function Profile() {
 
         <div className="profile-actions">
           <button className="edit-btn">Edit Profile</button>
-          <button className="logout-btn">Log Out</button>
+          <button className="logout-btn" onClick={handleLogout}>Log Out</button>
         </div>
       </div>
     </div>

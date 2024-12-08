@@ -220,3 +220,19 @@ button:hover {
   word-wrap: break-word;
   word-break: break-word;
 }
+.search-bar {
+  width: 100%;
+  justify-content: center;
+  display: flex
+;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #2d3748;
+  color: white;
+}

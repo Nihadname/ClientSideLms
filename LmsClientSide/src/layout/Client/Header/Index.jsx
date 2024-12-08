@@ -72,8 +72,9 @@ const HeaderClient = () => {
         <div className="navbar-user">
           {isLoggedIn ? (
             <>
-              <span className="navbar-username">Hi, {userName}</span>
+              <span className="navbar-username">{userName}</span>
               <Link to="/profile" className="navbar-profile-link">Profile</Link>
+              <Link to="/NotesPage" className="navbar-profile-link">NotesPage</Link>
               <button onClick={handleLogout} className="navbar-logout">Logout</button>
             </>
           ) : (

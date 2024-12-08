@@ -18,6 +18,7 @@ function NotesPage() {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 3;
+  const [searchQuery, setSearchQuery] = useState('');  // State for search query
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -27,6 +28,7 @@ function NotesPage() {
           params: {
             pageNumber: pageNumber,
             pageSize: pageSize,
+            searchQuery: searchQuery, 
           },
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -44,7 +46,7 @@ function NotesPage() {
     };
 
     fetchNotes();
-  }, [pageNumber]);
+  }, [pageNumber,searchQuery]);
 
   console.log(notes);  // Log notes to ensure each note has a unique ID
 
@@ -121,11 +123,12 @@ function NotesPage() {
   };
 
   return (
+    
     <div className="notes-page">
       <h1>My Notes</h1>
       {loading && <p>Loading notes...</p>}
       {error && <p className="error">{error}</p>}
-
+      
       <div className="new-note">
         <input
           type="text"
@@ -146,7 +149,14 @@ function NotesPage() {
         />
         <button onClick={handleCreateNote}>Add Note</button>
       </div>
-
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search notes..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}  // Update searchQuery state on input change
+        />
+      </div>
       <div className="notes-list" style={{marginBottom:"25px"}}>
         {notes.map(note => {
           if (!note.id) {

@@ -68,7 +68,7 @@ body, html {
   color: #60a5fa; /* Soft Blue Hover */
 }
 
-/* Responsive Design */
+/* Hamburger Menu */
 .navbar-toggle {
   display: none;
   flex-direction: column;
@@ -83,22 +83,14 @@ body, html {
   border-radius: 2px;
 }
 
-/* Dropdown Menu for Mobile */
-.navbar-links {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.navbar-links.active {
-  display: flex;
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
+  /* Hide the links by default */
   .navbar-links {
     display: none;
     flex-direction: column;
     position: absolute;
-    top: 60px;
+    top: 60px; /* Adjusted to create space below navbar */
     right: 0;
     background: linear-gradient(to right, #6b21a8, #4f46e5); /* Dropdown Gradient */
     padding: 1rem;
@@ -106,12 +98,47 @@ body, html {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
 
+  /* When the menu is active, display the links */
   .navbar-links.active {
     display: flex;
   }
 
+  /* Show the hamburger icon */
   .navbar-toggle {
     display: flex;
     margin-right: 28px;
+  }
+
+  .navbar-toggle .bar {
+    width: 30px; /* Increased size for better visibility */
+  }
+
+  /* Align user info nicely on mobile */
+  .navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-direction: row; /* Keep it horizontal on mobile */
+    margin-top: 1rem;
+  }
+
+  .navbar-login {
+    display: inline-block;
+    margin-top: 1rem;
+  }
+
+  .navbar-profile-link, .navbar-logout {
+    font-size: 0.9rem; /* Slightly reduce font size for mobile */
+  }
+
+  /* Optionally, stack the user info below the menu items */
+  .navbar-user {
+    margin-top: 1rem;
+    justify-content: flex-start;
+  }
+
+  .navbar-user span, .navbar-profile-link, .navbar-logout {
+    font-size: 0.9rem;
+    margin-left: 0.5rem; /* Small gap between username and buttons */
   }
 }
