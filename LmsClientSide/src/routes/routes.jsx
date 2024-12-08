@@ -4,6 +4,7 @@ import ClientLayout from '../layout/Client/ClientLayout/Index';
 import Home from '../pages/Client/Home';
 import Login from '../pages/Client/Login/Index';
 import Profile from '../pages/Client/Profile/Index';
+import NotesPage from '../pages/Note/Index';
 
 
 const AppRoutes = () => {
@@ -13,6 +14,8 @@ const AppRoutes = () => {
         <Route index element={<Home />} />
         <Route path="/Login"  index element={<Login />} />
         <Route path="/Profile"  index element={<Profile />} />
+        <Route path="/NotesPage"  index element={<NotesPage />} />
+
       </Route>
     </Routes>
   );

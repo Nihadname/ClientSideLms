@@ -281,8 +281,8 @@ const Home = () => {
   <p className="section-description">
     Unlock endless possibilities with our platform! Here's what sets us apart.
   </p>
-  <div className="feature-list">
-    <div className="feature-card">
+  <div className="feature-list" >
+    <div className="feature-card" style={{width:"350px"}}>
       <div className="icon-wrapper">
       <FontAwesomeIcon icon={faBook} className="feature-icon" />
       </div>
@@ -290,7 +290,7 @@ const Home = () => {
       <p>Access a wide range of subjects with expert guidance and tailored content.</p>
       <button className="learn-more">Learn More</button>
     </div>
-    <div className="feature-card">
+    <div className="feature-card"  style={{width:"350px"}}>
       <div className="icon-wrapper">
       <FontAwesomeIcon icon={faUsers} className="feature-icon" />
       </div>
@@ -298,7 +298,7 @@ const Home = () => {
       <p>Join a vibrant community of learners and educators to grow together.</p>
       <button className="learn-more">Learn More</button>
     </div>
-    <div className="feature-card">
+    <div className="feature-card"  style={{width:"350px"}}>
       <div className="icon-wrapper">
       <FontAwesomeIcon icon={faChartLine} className="feature-icon" />
       </div>
