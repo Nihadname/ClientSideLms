@@ -1,0 +1,78 @@
+.payment-page {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #ffffff; /* White background for a clean look */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s; /* Add a subtle hover effect */
+}
+
+.payment-page:hover {
+  transform: scale(1.02); /* Slightly scale up on hover */
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif; /* Change font for a modern look */
+}
+
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-element-container {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9; /* Light background for card input */
+}
+
+.card-element {
+  padding: 10px;
+  border: none; /* Remove default border */
+  outline: none; /* Remove outline */
+}
+
+.pay-button {
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s; /* Add transition for hover effect */
+}
+
+.pay-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.generate-button {
+  margin-top: 10px;
+  background-color: #007BFF; /* Blue background */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s; /* Add transition for hover effect */
+}
+
+.generate-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
+} 

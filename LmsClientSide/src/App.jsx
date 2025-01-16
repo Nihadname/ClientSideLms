@@ -1,15 +1,14 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import './App.css';
 import AppRoutes from './routes/routes';
-import './index.css'
+import './index.css';
 
 function App() {
-
   return (
     <>
-     <AppRoutes />
+      <AppRoutes />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

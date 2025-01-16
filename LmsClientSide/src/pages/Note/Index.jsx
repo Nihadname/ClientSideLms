@@ -35,18 +35,26 @@ function NotesPage() {
           },
         });
 
-        console.log(response.data); // Log to verify data structure
-        setNotes(response.data.items);
-        setTotalPages(response.data.totalPages);
+        console.log('API Response:', response.data); // Log the entire response to verify structure
+
+        // Check if response.data and response.data.data are defined
+        if (response.data && response.data.data) {
+          setNotes(response.data.data.items || []); // Ensure notes is an array
+          setTotalPages(response.data.data.totalPages || 1); // Default to 1 if undefined
+        } else {
+          console.error('Unexpected API response structure:', response.data);
+          setNotes([]); // Set notes to an empty array if structure is unexpected
+        }
       } catch (error) {
         console.error('Error fetching notes:', error);
+        setNotes([]); // Set notes to an empty array on error
       } finally {
         setLoading(false);
       }
     };
 
     fetchNotes();
-  }, [pageNumber,searchQuery]);
+  }, [pageNumber, searchQuery]);
 
   console.log(notes);  // Log notes to ensure each note has a unique ID
 
@@ -158,7 +166,7 @@ function NotesPage() {
         />
       </div>
       <div className="notes-list" style={{marginBottom:"25px"}}>
-        {notes.map(note => {
+        {Array.isArray(notes) && notes.map(note => {  // Ensure notes is an array
           if (!note.id) {
             console.error("Note has no ID", note);  // This will log notes that lack an ID
           }
